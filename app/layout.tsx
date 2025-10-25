@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Regina Healthcare - Skip the Wait",
+  title: "ClinicQ - Skip the Queue",
   description: "Book appointments and track waiting times at Regina healthcare facilities",
     generator: 'v0.app'
 }

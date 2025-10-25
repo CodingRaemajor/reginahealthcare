@@ -17,12 +17,6 @@ export function Header() {
             <Button asChild variant="ghost">
               <Link href="/">Find Facilities</Link>
             </Button>
-            <Button asChild variant="ghost">
-              <Link href="/dashboard">
-                <Calendar className="w-4 h-4 mr-2" />
-                My Bookings
-              </Link>
-            </Button>
           </nav>
         </div>
       </div>
