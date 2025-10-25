@@ -18,14 +18,17 @@ Your project is live at:
 
 ### Email delivery configuration
 
-The booking confirmation emails now use [SendGrid](https://sendgrid.com/). To enable delivery in any environment, provide the following environment variables:
+Booking confirmation emails are now delivered through [Firebase Extensions - Trigger Email](https://firebase.google.com/products/extensions/firestore-send-email) (or any other workflow that listens to Firestore writes). To enable delivery in any environment, provide the following environment variables and install the extension in your Firebase project:
 
 | Variable | Description |
 | --- | --- |
-| `SENDGRID_API_KEY` | API key with permission to send emails from your SendGrid account. |
-| `SENDGRID_FROM_EMAIL` | Verified sender address in SendGrid (for example, `Regina Healthcare <noreply@yourdomain.com>`). |
+| `FIREBASE_PROJECT_ID` | The Firebase project ID that hosts the email extension. |
+| `FIREBASE_CLIENT_EMAIL` | Service account client email with access to Firestore. |
+| `FIREBASE_PRIVATE_KEY` | The service account private key (escape newlines as `\n` in environment variables). |
+| `FIREBASE_FROM_EMAIL` | Sender address configured in the email extension (for example, `Regina Healthcare <noreply@yourdomain.com>`). |
+| `FIREBASE_MAIL_COLLECTION` *(optional)* | Firestore collection monitored by the extension. Defaults to `mail`. |
 
-Add these values to your local `.env.local` file and to the Vercel project settings. Once configured, every facility booking will trigger a confirmation email via SendGrid.
+Add these values to your local `.env.local` file and to the Vercel project settings. The API route writes booking confirmations to the configured Firestore collection; the Firebase extension turns those documents into outbound emails for every facility booking.
 
 ## Build your app
 
