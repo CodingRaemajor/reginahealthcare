@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     try {
       const { data, error } = await resend.emails.send({
-        from: "Regina Healthcare <onboarding@resend.dev>",
+        from: "Regina Healthcare <onboarding@reginacare.xyz>",
         to: [email],
         subject: `Booking Confirmation - ${facility.name}`,
         react: BookingConfirmationEmail({
