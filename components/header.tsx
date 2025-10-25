@@ -8,7 +8,7 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
             <Image
-              src="/logo.png"            // put your file in /public/logo.png
+              src="/logo.png"            
               alt="ClinicQ"
               width={32}
               height={32}
