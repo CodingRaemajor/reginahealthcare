@@ -11,7 +11,7 @@ export function Header() {
             <div className="bg-sky-500 rounded-lg p-2">
               <Activity className="w-5 h-5 text-white" />
             </div>
-            <span className="text-slate-900">Regina Healthcare</span>
+            <span className="text-slate-900">ClinicQ</span>
           </Link>
           <nav className="flex items-center gap-4">
           </nav>
