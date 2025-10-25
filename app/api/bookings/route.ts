@@ -1,8 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { Resend } from "resend"
+import sgMail from "@sendgrid/mail"
+import { render } from "@react-email/render"
 import { BookingConfirmationEmail } from "@/components/emails/booking-confirmation"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
+const SENDGRID_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL
+
+if (SENDGRID_API_KEY) {
+  sgMail.setApiKey(SENDGRID_API_KEY)
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,12 +22,20 @@ export async function POST(request: NextRequest) {
     let emailSent = false
     let emailError = null
 
-    try {
-      const { data, error } = await resend.emails.send({
-        from: "Regina Healthcare <onboarding@resend.dev>",
-        to: [email],
-        subject: `Booking Confirmation - ${facility.name}`,
-        react: BookingConfirmationEmail({
+    if (!SENDGRID_API_KEY || !SENDGRID_FROM_EMAIL) {
+      const missing = [
+        !SENDGRID_API_KEY ? "SENDGRID_API_KEY" : null,
+        !SENDGRID_FROM_EMAIL ? "SENDGRID_FROM_EMAIL" : null,
+      ]
+        .filter(Boolean)
+        .join(", ")
+
+      const message = `Email service is not configured. Missing environment variables: ${missing}`
+      console.warn("[v0] Email configuration warning:", message)
+      emailError = message
+    } else {
+      try {
+        const emailComponent = BookingConfirmationEmail({
           bookingId,
           patientName: `${firstName} ${lastName}`,
           facility,
@@ -30,19 +44,25 @@ export async function POST(request: NextRequest) {
           dateOfBirth,
           hasHealthCard,
           reasonForVisit,
-        }),
-      })
+        })
 
-      if (error) {
-        console.error("[v0] Email sending error:", error)
-        emailError = error.message || "Email delivery failed"
-      } else {
-        console.log("[v0] Email sent successfully:", data)
+        const emailHtml = render(emailComponent)
+        const emailText = render(emailComponent, { plainText: true })
+
+        await sgMail.send({
+          to: email,
+          from: SENDGRID_FROM_EMAIL,
+          subject: `Booking Confirmation - ${facility.name}`,
+          html: emailHtml,
+          text: emailText,
+        })
+
+        console.log("[v0] Email sent successfully via SendGrid")
         emailSent = true
+      } catch (emailErr) {
+        console.error("[v0] SendGrid email error:", emailErr)
+        emailError = emailErr instanceof Error ? emailErr.message : "Email delivery failed"
       }
-    } catch (emailErr) {
-      console.error("[v0] Email exception:", emailErr)
-      emailError = emailErr instanceof Error ? emailErr.message : "Email service unavailable"
     }
 
     return NextResponse.json({

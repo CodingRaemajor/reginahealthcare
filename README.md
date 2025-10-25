@@ -16,6 +16,17 @@ Your project is live at:
 
 **[https://vercel.com/raes-projects-72b28829/v0-appointment-booking-system](https://vercel.com/raes-projects-72b28829/v0-appointment-booking-system)**
 
+### Email delivery configuration
+
+The booking confirmation emails now use [SendGrid](https://sendgrid.com/). To enable delivery in any environment, provide the following environment variables:
+
+| Variable | Description |
+| --- | --- |
+| `SENDGRID_API_KEY` | API key with permission to send emails from your SendGrid account. |
+| `SENDGRID_FROM_EMAIL` | Verified sender address in SendGrid (for example, `Regina Healthcare <noreply@yourdomain.com>`). |
+
+Add these values to your local `.env.local` file and to the Vercel project settings. Once configured, every facility booking will trigger a confirmation email via SendGrid.
+
 ## Build your app
 
 Continue building your app on:
