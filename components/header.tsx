@@ -14,9 +14,6 @@ export function Header() {
             <span className="text-slate-900">Regina Healthcare</span>
           </Link>
           <nav className="flex items-center gap-4">
-            <Button asChild variant="ghost">
-              <Link href="/">Find Facilities</Link>
-            </Button>
           </nav>
         </div>
       </div>
